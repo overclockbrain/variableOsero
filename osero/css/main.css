@@ -1,0 +1,19 @@
+@charset "UTF-8";
+
+/* オセロ盤 */
+#mainTable img {
+    vertical-align: middle;
+    width: 85%;
+}
+#mainTable {
+    margin: 0 auto;
+    padding-bottom:-5px;
+    border-collapse: collapse;
+}
+#mainTable td, #mainTable tr, #mainTable th {
+    text-align: center;
+    width: 60px;
+    height: 60px;
+    border: solid 1px black;
+    background-color: lime;
+}
