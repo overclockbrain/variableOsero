@@ -1,9 +1,7 @@
-//mapArray;
+//初期呼び出し時に実行される処理
 window.onload = function(){
     const Height = 6; //高さ
     const Width = 6;  //横幅
-    //mapArray = new Array();
-    //let img = document.getElementById("pic");
 
     //ゲームのマスを表示
     makePlayground(Height,Width);
@@ -26,8 +24,7 @@ window.onload = function(){
 //表を作る関数
 function makePlayground(Height,Width){
     let map = document.getElementById("playground");
-    let mapData = "";
-    mapData += "<table id='mainTable'>";
+    let mapData = "<table id='mainTable'>";
     for(let i = 0;i < Height;i++){
         mapData += "<tr>"; 
         for(let j = 0;j < Width;j++){
@@ -50,8 +47,8 @@ function makePlayground(Height,Width){
 
 function selectNum(){
     //初期設定
-    let box1 = "<select id='slct1'>";
-    let box2 = "<select id='slct2'>";
+    let box1 = "縦<select id='slct1'>";
+    let box2 = "横<select id='slct2'>";
 
     //データを4から2飛びで20まで要素を作成
     for(i = 4; i < 20; i += 2){
@@ -59,6 +56,8 @@ function selectNum(){
         box2 += "<option value='" + i +"'>" + i + "</option>";
     }
 
+    box1 += "</select><br>";
+    box2 += "</select>";
     //セレクトボックス追加処理
     $("#selectNum").append(box1);
     $("#selectNum").append(box2);
