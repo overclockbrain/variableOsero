@@ -17,7 +17,7 @@
     border: solid 1px black;
     background-color: lime;
 }
-#selectNum{
+.slctNum{
     text-align: center;
     padding-bottom:10px;
 }

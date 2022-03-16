@@ -47,18 +47,13 @@ function makePlayground(Height,Width){
 
 function selectNum(){
     //初期設定
-    let box1 = "縦<select id='slct1'>";
-    let box2 = "横<select id='slct2'>";
+    let box = "";
 
     //データを4から2飛びで20まで要素を作成
     for(i = 4; i < 20; i += 2){
-        box1 += "<option value='" + i +"'>" + i + "</option>";
-        box2 += "<option value='" + i +"'>" + i + "</option>";
+        box += "<option value='" + i +"'>" + i + "</option>";
     }
-
-    box1 += "</select><br>";
-    box2 += "</select>";
     //セレクトボックス追加処理
-    $("#selectNum").append(box1);
-    $("#selectNum").append(box2);
+    $("#selectNum").append(box);
+    $("#selectNum2").append(box);
 }
