@@ -3,11 +3,11 @@ class Board {
         this.width = width;
         this.height = height;
 
-        this.board = new Array(height);
+        this.state = new Array(height);
         for (let y = 0; y < height; y++) {
-            this.board[y] = new Array(width);
+            this.state[y] = new Array(width);
             for (let x = 0; x < width; x++) {
-                this.board[y][x] = new Koma();
+                this.state[y][x] = new Koma();
             }
         }
     }
@@ -20,7 +20,7 @@ class Board {
             let row = document.createElement('tr');
             for (let x = 0; x < this.width; x++) {
                 let cell = document.createElement('td');
-                cell.appendChild(this.board[y][x].imgElement);
+                cell.appendChild(this.state[y][x].imgElement);
 
                 row.appendChild(cell);
             }
