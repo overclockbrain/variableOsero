@@ -12,22 +12,25 @@ class Board {
         }
     }
 
+    /** 盤面のhtml要素を作成する。
+     * Return : HTMLTableElement
+     */
     createBoardElement() {
-        let div = document.createElement('div');
-        div.id = 'mainTable';
+        const table = document.createElement('table');
+        table.id = 'mainTable';
 
         for (let y = 0; y < this.height; y++) {
-            let row = document.createElement('tr');
+            const row = document.createElement('tr');
             for (let x = 0; x < this.width; x++) {
-                let cell = document.createElement('td');
+                const cell = document.createElement('td');
                 cell.appendChild(this.state[y][x].imgElement);
 
                 row.appendChild(cell);
             }
 
-            div.appendChild(row);
+            table.appendChild(row);
         }
-        return div;
+        return table;
     }
 }
 
@@ -54,7 +57,11 @@ class Koma {
 
         this.imgElement.addEventListener('click', () => {
             // 暫定処理
-            this.put(1);
+            if (this.state == 0) {
+                this.put(1);
+            } else {
+                this.flip();
+            }
         });
 
     }
@@ -71,8 +78,8 @@ class Koma {
 }
 
 window.onload = () => {
-    let playground = document.getElementById("playground");
+    const playground = document.getElementById("playground");
 
-    let board = new Board(8, 8);
+    const board = new Board(8, 8);
     playground.appendChild(board.createBoardElement());
 }
