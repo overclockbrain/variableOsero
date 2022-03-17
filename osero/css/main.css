@@ -3,7 +3,7 @@
 /* オセロ盤 */
 #mainTable img {
     vertical-align: middle;
-    width: 85%;
+    width: 100%;
 }
 #mainTable {
     margin: 0 auto;
@@ -12,12 +12,18 @@
 }
 #mainTable td, #mainTable tr, #mainTable th {
     text-align: center;
+    padding: 0;
     width: 60px;
     height: 60px;
     border: solid 1px black;
-    background-color: lime;
 }
 .slctNum{
     text-align: center;
     padding-bottom:10px;
+}
+/* rangeスライダー関連 */
+#viewy, #viewx {
+    text-align: center;
+    width: 3.5em;
+    border: none;
 }
