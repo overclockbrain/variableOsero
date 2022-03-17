@@ -67,8 +67,30 @@ class Koma {
 }
 
 window.onload = () => {
-    const playground = document.getElementById("playground");
+    let y = 4;  // boardの横のマス数
+    let x = 4;  // boardの縦のマス数
+    
+    // rangeでマス数を設定
+    let selecty = document.getElementById("selecty"),
+        viewy = document.getElementById("viewy"),
+        selectx = document.getElementById("selectx"),
+        viewx = document.getElementById("viewx"),
+        selectBtn = document.getElementById("selectBtn");
 
-    const board = new Board(8, 8);
-    playground.appendChild(board.boardElement);
+    // range「y」の値が変更されたら
+    selecty.addEventListener("input", (e) => {
+        viewy.value = e.target.value;
+        y = e.target.value;
+    });
+    // range「x」の値が変更されたら
+    selectx.addEventListener("input", (e) => {
+        viewx.value = e.target.value;
+        x = e.target.value;
+    });
+    // board を作成する
+    selectBtn.addEventListener("click", () => {
+        const playground = document.getElementById("playground");
+        const board = new Board(y, x);
+        playground.appendChild(board.boardElement);
+    });
 }
