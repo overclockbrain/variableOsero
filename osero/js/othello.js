@@ -11,6 +11,9 @@ class Board {
     }
 
     setStateAndElement(width, height) {
+        this.width = width;
+        this.height = height;
+
         this.boardElement.innerHTML = '';
         this.state = null;
 
@@ -38,6 +41,17 @@ class Board {
             }
             this.boardElement.appendChild(row);
         }
+
+        this.#putCenterKoma();
+    }
+    #putCenterKoma() {
+        const basisX = this.width / 2 - 1;
+        const basisY = this.height / 2 - 1;
+
+        this.state[basisY][basisX].put(1);
+        this.state[basisY][basisX + 1].put(2);
+        this.state[basisY + 1][basisX].put(2);
+        this.state[basisY + 1][basisX + 1].put(1);
     }
 }
 
@@ -75,11 +89,11 @@ class Koma {
 }
 
 window.onload = () => {
-    let y = 4;  // boardの横のマス数
-    let x = 4;  // boardの縦のマス数
+    let height = 4;  // boardの横のマス数
+    let width = 4;  // boardの縦のマス数
 
     const playground = document.getElementById("playground");
-    const board = new Board(y, x);
+    const board = new Board(height, width);
     playground.appendChild(board.boardElement);
 
     // rangeでマス数を設定
@@ -92,16 +106,16 @@ window.onload = () => {
     // range「y」の値が変更されたら
     selecty.addEventListener("input", (e) => {
         viewy.value = e.target.value;
-        y = e.target.value;
+        height = e.target.value;
     });
     // range「x」の値が変更されたら
     selectx.addEventListener("input", (e) => {
         viewx.value = e.target.value;
-        x = e.target.value;
+        width = e.target.value;
     });
     // board を作成する
     selectBtn.addEventListener("click", () => {
-        board.setStateAndElement(x, y);
+        board.setStateAndElement(width, height);
         console.log(board.state);
     });
 }
