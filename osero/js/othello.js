@@ -3,8 +3,16 @@ class Board {
         this.width = width;
         this.height = height;
 
+
         this.boardElement = document.createElement('table');
         this.boardElement.id = 'mainTable';
+
+        this.setStateAndElement(width, height);
+    }
+
+    setStateAndElement(width, height) {
+        this.boardElement.innerHTML = '';
+        this.state = null;
 
         this.state = new Array(height);
         for (let y = 0; y < height; y++) {
@@ -69,7 +77,11 @@ class Koma {
 window.onload = () => {
     let y = 4;  // boardの横のマス数
     let x = 4;  // boardの縦のマス数
-    
+
+    const playground = document.getElementById("playground");
+    const board = new Board(y, x);
+    playground.appendChild(board.boardElement);
+
     // rangeでマス数を設定
     let selecty = document.getElementById("selecty"),
         viewy = document.getElementById("viewy"),
@@ -89,8 +101,7 @@ window.onload = () => {
     });
     // board を作成する
     selectBtn.addEventListener("click", () => {
-        const playground = document.getElementById("playground");
-        const board = new Board(y, x);
-        playground.appendChild(board.boardElement);
+        board.setStateAndElement(x, y);
+        console.log(board.state);
     });
 }
