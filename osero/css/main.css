@@ -16,6 +16,7 @@
     width: 60px;
     height: 60px;
     border: solid 1px black;
+    background-color: lime;
 }
 .slctNum{
     text-align: center;
