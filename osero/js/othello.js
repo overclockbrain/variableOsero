@@ -80,7 +80,7 @@ class Koma {
     flip() {
         this.state = this.state % 2 + 1;
         // 入れ替え時に画像を回転させる
-        anime({
+        /* anime({
             targets: this.imgElement,
             rotateY: [180, -180],
             easing: 'easeInOutQuad',
@@ -88,7 +88,8 @@ class Koma {
         });
         setTimeout(() => {
             this.imgElement.src = KOMAIMG[this.state];
-        }, 250);
+        }, 250); */
+        this.imgElement.src = KOMAIMG[this.state];
     }
 
     put(state) {
