@@ -6,9 +6,6 @@ window.onload = function(){
     //ゲームのマスを表示
     makePlayground(Height,Width);
 
-    //マスの縦横の数を入力するセレクトボックスを作成
-    selectNum();
-
     // imgの上にマウスカーソルがのると
     $("img").on({
         "mouseover": function() {
@@ -44,16 +41,14 @@ function makePlayground(Height,Width){
     //ゲームのマスを表示
     map.innerHTML = mapData;
 }
-
-function selectNum(){
-    //初期設定
-    let box = "";
-
-    //データを4から2飛びで20まで要素を作成
-    for(i = 4; i < 20; i += 2){
-        box += "<option value='" + i +"'>" + i + "</option>";
-    }
-    //セレクトボックス追加処理
-    $("#selectNum").append(box);
-    $("#selectNum2").append(box);
+function getXYcoord(){
+    $("td").on({
+        "click":function(){
+            //縦
+            var row = $(this).closest('tr').index();
+            //横
+            var col = this.cellIndex;
+            console.log('Row: ' + row + ', Column: ' + col);
+        }
+    })
 }
