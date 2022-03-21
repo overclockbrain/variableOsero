@@ -1,5 +1,9 @@
 <template>
-  <Othello :width="8" :height="8" />
+  <input type="range" min="4" max="50" step="2" v-model.number="width" />
+  {{ width }}
+  <input type="range" min="4" max="50" step="2" v-model.number="height" />
+  {{ height }}
+  <Othello :width="width" :height="height" />
 </template>
 
 <script>
@@ -9,6 +13,12 @@ export default {
   name: "App",
   components: {
     Othello,
+  },
+  data: function () {
+    return {
+      width: 4,
+      height: 4,
+    };
   },
 };
 </script>
