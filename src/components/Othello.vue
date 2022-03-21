@@ -45,20 +45,23 @@ export default {
       for (let x = 0; x < this.width; x++) {
         state[x] = new Array(this.height).fill(0);
       }
-
+      this.state = state;
+    },
+    putCenterPieces() {
       const basisX = this.width / 2 - 1;
       const basisY = this.height / 2 - 1;
 
-      state[basisX][basisY] = 1;
-      state[basisX][basisY + 1] = 2;
-      state[basisX + 1][basisY] = 2;
-      state[basisX + 1][basisY + 1] = 1;
+      this.state[basisX][basisY] = 1;
+      this.state[basisX][basisY + 1] = 2;
+      this.state[basisX + 1][basisY] = 2;
+      this.state[basisX + 1][basisY + 1] = 1;
 
-      this.state = state;
+      this.state = this.state.slice();
     },
   },
   created: function () {
     this.initState();
+    this.putCenterPieces();
   },
   watch: {
     width: function () {
