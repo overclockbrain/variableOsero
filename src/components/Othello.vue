@@ -1,15 +1,15 @@
 <template>
   <table>
     <tr v-for="y in height" :key="y">
-      <td v-for="x in width" :key="x" @click="change(x, y)">
-        <Cell :piece="getState(x, y)" />
+      <td v-for="x in width" :key="x">
+        <img :src="getImgSrc(x, y)" @click="change($event, x, y)" />
       </td>
     </tr>
   </table>
 </template>
 
 <script>
-import Cell from "./Cell.vue";
+import anime from "animejs";
 
 export default {
   name: "Othello",
@@ -17,69 +17,84 @@ export default {
     width: Number,
     height: Number,
   },
-  data: function () {
+  data() {
     return {
       state: Array,
     };
-  },
-  components: {
-    Cell,
   },
   methods: {
     getState(x, y) {
       return this.state[x - 1][y - 1];
     },
     setState(state, x, y) {
-      this.state[x - 1][y - 1] = state;
+      this.state[x - 1].splice(y - 1, 1, state);
     },
-    change(x, y) {
-      let state = this.getState(x, y);
-      state = (state + 1) % 3;
-      this.setState(state, x, y);
+    getImgSrc(x, y) {
+      const state = this.getState(x, y);
 
-      const newState = this.state.slice();
-      this.state = newState;
+      if (state == 1) {
+        return require("../assets/black.jpg");
+      } else if (state == 2) {
+        return require("../assets/white.jpg");
+      }
+      return require("../assets/none.jpg");
     },
     initState() {
-      const state = new Array(this.width);
+      this.state = new Array(this.width);
+
       for (let x = 0; x < this.width; x++) {
-        state[x] = new Array(this.height).fill(0);
+        this.state[x] = new Array(this.height).fill(0);
       }
-      this.state = state;
+
+      const basisX = this.width / 2;
+      const basisY = this.height / 2;
+
+      this.setState(1, basisX, basisY);
+      this.setState(2, basisX, basisY + 1);
+      this.setState(2, basisX + 1, basisY);
+      this.setState(1, basisX + 1, basisY + 1);
     },
-    putCenterPieces() {
-      const basisX = this.width / 2 - 1;
-      const basisY = this.height / 2 - 1;
+    change(event, x, y) {
+      const state = this.getState(x, y);
+      let newState = 1;
 
-      this.state[basisX][basisY] = 1;
-      this.state[basisX][basisY + 1] = 2;
-      this.state[basisX + 1][basisY] = 2;
-      this.state[basisX + 1][basisY + 1] = 1;
+      const element = event.target;
 
-      this.state = this.state.slice();
+      if (state != 0) {
+        anime({
+          targets: element,
+          rotateY: [180, -180],
+          easing: "easeInOutQuad",
+          duration: 500,
+        });
+
+        newState = (state % 2) + 1;
+        this.setState(newState, x, y);
+      } else {
+        this.setState(newState, x, y);
+      }
     },
   },
-  created: function () {
+  created() {
     this.initState();
-    this.putCenterPieces();
   },
   watch: {
-    width: function () {
+    width() {
       this.initState();
     },
-    height: function () {
+    height() {
       this.initState();
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
 table {
   border-collapse: collapse;
 }
-td,
-tr {
+tr,
+td {
   height: 60px;
   padding: 0;
 }
@@ -89,5 +104,9 @@ td {
   height: 60px;
   border: 1px solid black;
   background-color: lime;
+}
+img {
+  vertical-align: middle;
+  width: 60px;
 }
 </style>
