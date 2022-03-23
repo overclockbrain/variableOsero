@@ -23,12 +23,29 @@ export default {
     };
   },
   methods: {
+    /** 盤面の状態を取得
+     * @param {number} x 盤面のx座標
+     * @param {number} y 盤面のy座標
+     *
+     * @return 指定した座標の状態
+     */
     getState(x, y) {
       return this.state[x - 1][y - 1];
     },
+    /** 盤面の状態を設定
+     * @param {state} state 設定する値
+     * @param {number} x 盤面のx座標
+     * @param {number} y 盤面のy座標
+     */
     setState(state, x, y) {
       this.state[x - 1].splice(y - 1, 1, state);
     },
+    /** 画像のソースを取得
+     * @param {number} x 盤面のx座標
+     * @param {number} y 盤面のy座標
+     *
+     * @return {string} 画像のソース
+     */
     getImgSrc(x, y) {
       const state = this.getState(x, y);
 
@@ -39,6 +56,8 @@ export default {
       }
       return require("../assets/none.jpg");
     },
+    /** プロパティの値「width,height」で盤面を初期化
+     */
     initState() {
       this.state = new Array(this.width);
 
@@ -58,6 +77,9 @@ export default {
       const state = this.getState(x, y);
       let newState = 1;
 
+      /** アニメーションの動作に使用
+       * @type {HTMLElement}
+       */
       const element = event.target;
 
       if (state != 0) {
