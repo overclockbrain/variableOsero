@@ -4,7 +4,7 @@
         <title>オセロ</title>
         <script src="../js/anime.min.js"></script>
         <script src="../js/jquery-3.6.0.min.js"></script>
-        <script src="../js/main.js"></script>
+        <!-- <script src="../js/main.js"></script> -->
         <script src="../js/othello.js"></script>
         <link rel="stylesheet" href="../css/main.css">
     </head>
@@ -13,6 +13,8 @@
             <h1>可変マスオセロ</h1>
         </article>
         <main>
+            白：<div id="putWhite">0</div><br>
+            黒：<div id="putBlack">0</div><br>
             <div class="slctNum">
                 <input type="range" id="selectx" min="4" max="50" step="2" value="4">
                 <input type="number" id="viewx" value="4" readonly>

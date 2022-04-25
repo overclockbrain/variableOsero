@@ -1,9 +1,18 @@
+/*
+*メモ
+*・確定が押されるたびに白黒の数をリセットしたい。
+*・ひっくり返す処理は角の分を少しずつ作っている。
+*・ひっくり返った時に数が変わるようにしたい。
+*・もう少しスマートに記述したい。
+*******************************************************/
+
 class Board {
     constructor(width, height) {
         this.width = width;
         this.height = height;
-
-
+        this.putKoma = 4;
+        this.putBl = 2;
+        this.putWh = 2;
         this.boardElement = document.createElement('table');
         this.boardElement.id = 'mainTable';
 
@@ -21,6 +30,7 @@ class Board {
         for (let y = 0; y < height; y++) {
             const row = document.createElement('tr');
             this.state[y] = new Array(width);
+            
 
             for (let x = 0; x < width; x++) {
                 const cell = document.createElement('td');
@@ -28,7 +38,18 @@ class Board {
                 koma.imgElement.addEventListener('click', () => {
                     // 暫定処理
                     if (koma.state == 0) {
-                        koma.put(1);
+                        //白と黒を交互に置くプログラム
+                        if(this.putKoma % 2 == 0){
+                            koma.put(1);
+                            this.putBl++;
+                            console.log(this.putBl);
+                            document.getElementById("putBlack").innerHTML= this.putBl;
+                        }else{
+                            koma.put(2);
+                            this.putWh++;
+                            document.getElementById("putWhite").innerHTML = this.putWh;
+                        }
+                        this.putKoma++;
                     } else {
                         koma.flip();
                     }
@@ -98,22 +119,26 @@ class Koma {
 }
 //ひっくり返す処理のテスト
 function returnKoma(){
+    //現在置かれたコマの色が必要->putKomaの数を割って偶数なら黒、奇数なら白とする。
     //端っこにあるのかを判定
-    if(x == 0 || y == 0 || x + 1 == width || y + 1 == height){
+    if(x == 0 || y == 0 || x + 1 == this.width || y + 1 == this.height){
         //角にあるのかを判定
         //左上、右下、左下、右上
         if(x == 0 && y == 0){
             //どの座標へ移動してみるのかと、コマの状態を比較する
-            for(i = x; i < width;i++){
-                if(){
+            for(i = x; i < this.width;i++){
+                nextKoma = this.board.state[x + 1][y]["state"];
+                if(nextKoma == "持ち駒ではないやつ"){
+                    
+                }else if(nextKoma == 0){
 
                 }
             }
-        }else if(x + 1 == width && y + 1 == height){
+        }else if(x + 1 == this.width && y + 1 == this.height){
 
-        }else if (x == 0 && y + 1 == height){
+        }else if (x == 0 && y + 1 == this.height){
 
-        }else if(x + 1 == width && y == 0){
+        }else if(x + 1 == this.width && y == 0){
 
         }
     //それ以外の場所の処理
