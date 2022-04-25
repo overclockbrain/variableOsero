@@ -58,13 +58,21 @@ function returnKoma(){
     if(x == 0 || y == 0 || x + 1 == width || y + 1 == height){
         //角にあるのかを判定
         //左上、右下、左下、右上
-        if((x == 0 && y == 0) || (x + 1 == width && y + 1 == height) || (x == 0 && y + 1 == height) || (x + 1 == width && y == 0)){
+        if(x == 0 && y == 0){
             //どの座標へ移動してみるのかと、コマの状態を比較する
-                
-            for(i = x; ){
+            for(i = x; i < width;i++){
+                if()
+            }
+        }else if(x + 1 == width && y + 1 == height){
 
-                }
+        }else if (x == 0 && y + 1 == height){
+
+        }else if(x + 1 == width && y == 0){
+
         }
+    //それ以外の場所の処理
+    }else{
+        
     }
 }
 /*
