@@ -53,6 +53,7 @@ class Board {
                     } else {
                         koma.flip();
                     }
+                    this.countKoma();
                 });
 
                 this.state[y][x] = koma;
