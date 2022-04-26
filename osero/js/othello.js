@@ -4,6 +4,8 @@
 *・ひっくり返す処理は角の分を少しずつ作っている。
 *・ひっくり返った時に数が変わるようにしたい。
 *・もう少しスマートに記述したい。
+*
+*はん
 *******************************************************/
 
 class Board {
@@ -76,6 +78,9 @@ class Board {
         this.state[basisY + 1][basisX + 1].put(1);
     }
     countKoma() {
+        let putWhite = document.getElementById("putWhite"),
+            putBlack = document.getElementById("putBlack");
+
         let black = 0;
         let white = 0;
         for (let y = 0; y < this.height; y ++) {
@@ -87,6 +92,8 @@ class Board {
                 }
             }
         }
+        putWhite.innerHTML = white;
+        putBlack.innerHTML = black;
         console.log("black : " + black, "white : " + white);
     }
 }
