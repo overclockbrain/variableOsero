@@ -74,6 +74,20 @@ class Board {
         this.state[basisY + 1][basisX].put(2);
         this.state[basisY + 1][basisX + 1].put(1);
     }
+    countKoma() {
+        let black = 0;
+        let white = 0;
+        for (let y = 0; y < this.height; y ++) {
+            for (let x = 0; x < this.width; x ++) {
+                if (this.state[y][x]["state"] == 1) {
+                    black ++;
+                } else if (this.state[y][x]["state"] == 2) {
+                    white ++;
+                }
+            }
+        }
+        console.log("black : " + black, "white : " + white);
+    }
 }
 
 //
