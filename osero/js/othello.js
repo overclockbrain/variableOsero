@@ -43,13 +43,10 @@ class Board {
                         //白と黒を交互に置くプログラム
                         if(this.putKoma % 2 == 0){
                             koma.put(1);
-                            this.putBl++;
-                            console.log(this.putBl);
-                            document.getElementById("putBlack").innerHTML= this.putBl;
+                            this.reverseKoma(y, x, 1);
                         }else{
                             koma.put(2);
-                            this.putWh++;
-                            document.getElementById("putWhite").innerHTML = this.putWh;
+                            this.reverseKoma(y, x, 2);
                         }
                         this.putKoma++;
                     } else {
@@ -95,6 +92,81 @@ class Board {
         putWhite.innerHTML = white;
         putBlack.innerHTML = black;
         console.log("black : " + black, "white : " + white);
+    }
+    /**
+     * コマを裏返す処理　改良前提
+     * @param {Number} stateY 置いたコマのX座標
+     * @param {Number} stateX 置いたコマのY座標
+     * @param {Number} stateColor 置いたコマの色
+     */
+    reverseKoma(stateY, stateX, stateColor) {
+        let reverseColor = stateColor % 2 + 1;  // 裏返すコマの色
+        let reverseState = new Array();
+
+        // 縦方向(上)の探索
+        let vertical_up = new Array();
+        for (let y = stateY - 1; y >= 0; y --) {
+            console.log("y:" + y, "x:" + stateX);
+            if (this.state[y][stateX]["state"] == reverseColor) {       // 裏返すことができるコマが置かれていたら
+                vertical_up.push({flag: "reverse", y: y, x: stateX});
+            } else if (this.state[y][stateX]["state"] == stateColor) {  // 置いたコマと同じ色のコマが見つかったら
+                vertical_up.push({flag: "end"});
+                reverseState.push(vertical_up);
+                break;
+            } else if (this.state[y][stateX]["state"] == 0) {           // まだ何も置かれていないなら
+                vertical_up.push({flag: "break"})
+                reverseState.push(vertical_up);
+                break;
+            }
+        }
+        // 縦方向(下)の探索
+        let vertical_down = new Array();
+        for (let y = stateY + 1; y < this.height; y ++) {
+            if (this.state[y][stateX]["state"] == reverseColor) {
+                vertical_down.push({flag: "reverse", y: y, x: stateX});
+            } else if (this.state[y][stateX]["state"] == stateColor) {
+                vertical_down.push({flag: "end"});
+                reverseState.push(vertical_down);
+                break;
+            } else if (this.state[y][stateX]["state"] == 0) {
+                vertical_down.push({flag: "break"})
+                reverseState.push(vertical_down);
+                break;
+            }
+        }
+        // 横方向(左)の探索
+        let horizontal_left = new Array();
+        for (let x = stateX - 1; x >= 0; x --) {
+            console.log("y:" + stateY, "x:" + x);
+            if (this.state[stateY][x]["state"] == reverseColor) {
+                horizontal_left.push({flag: "reverse", stateY: stateY, x: x});
+            } else if (this.state[stateY][x]["state"] == stateColor) {
+                horizontal_left.push({flag: "end"});
+                reverseState.push(horizontal_left);
+                break;
+            } else if (this.state[stateY][x]["state"] == 0) {
+                horizontal_left.push({flag: "break"})
+                reverseState.push(horizontal_left);
+                break;
+            }
+        }
+        // 横方向(右)の探索
+        let horizontal_right = new Array();
+        for (let x = stateX + 1; x < this.width; x ++) {
+            console.log("y:" + stateY, "x:" + x);
+            if (this.state[stateY][x]["state"] == reverseColor) {
+                horizontal_right.push({flag: "reverse", stateY: stateY, x: x});
+            } else if (this.state[stateY][x]["state"] == stateColor) {
+                horizontal_right.push({flag: "end"});
+                reverseState.push(horizontal_right);
+                break;
+            } else if (this.state[stateY][x]["state"] == 0) {
+                horizontal_right.push({flag: "break"})
+                reverseState.push(horizontal_right);
+                break;
+            }
+        }
+        console.log(reverseState);
     }
 }
 
