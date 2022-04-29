@@ -42,11 +42,39 @@ class Board {
                     if (koma.state == 0) {
                         //白と黒を交互に置くプログラム
                         if(this.putKoma % 2 == 0){
-                            koma.put(1);
-                            this.reverseKoma(y, x, 1);
+                            let reFlag = 0;
+                            reFlag += this.reverseKoma(y, x, 1, 0, -1);     // 右(探索する方向)
+                            reFlag += this.reverseKoma(y, x, 1, 0, 1);      // 左
+                            reFlag += this.reverseKoma(y, x, 1, -1, 0);     // 上
+                            reFlag += this.reverseKoma(y, x, 1, 1, 0);      // 下
+                            reFlag += this.reverseKoma(y, x, 1, -1, -1);    // 右上
+                            reFlag += this.reverseKoma(y, x, 1, 1, -1);     // 右下
+                            reFlag += this.reverseKoma(y, x, 1, -1, 1);     // 左上
+                            reFlag += this.reverseKoma(y, x, 1, 1, 1);      // 左下
+
+                            if (reFlag) {           // 裏返すコマの数が1以上なら
+                                koma.put(1);
+                                this.countKoma();
+                            } else {
+                                alert('そこには置けません!!');
+                            }
                         }else{
-                            koma.put(2);
-                            this.reverseKoma(y, x, 2);
+                            let reFlag = 0;
+                            reFlag += this.reverseKoma(y, x, 2, 0, -1);     // 右(探索する方向)
+                            reFlag += this.reverseKoma(y, x, 2, 0, 1);      // 左
+                            reFlag += this.reverseKoma(y, x, 2, -1, 0);     // 上
+                            reFlag += this.reverseKoma(y, x, 2, 1, 0);      // 下
+                            reFlag += this.reverseKoma(y, x, 2, -1, -1);    // 右上
+                            reFlag += this.reverseKoma(y, x, 2, 1, -1);     // 右下
+                            reFlag += this.reverseKoma(y, x, 2, -1, 1);     // 左上
+                            reFlag += this.reverseKoma(y, x, 2, 1, 1);      // 左下
+
+                            if (reFlag) {           // 裏返すコマの数が1以上なら
+                                koma.put(2);
+                                this.countKoma();
+                            } else {
+                                alert('そこには置けません!!');
+                            }
                         }
                         this.putKoma++;
                     } else {
