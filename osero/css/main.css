@@ -1,5 +1,14 @@
 @charset "UTF-8";
 
+body {
+    margin: 0 auto;
+    text-align: center;
+    align-items: center;
+    vertical-align: middle;
+}
+main div {
+    margin: 10px;
+}
 /* オセロ盤 */
 #mainTable img {
     vertical-align: middle;
