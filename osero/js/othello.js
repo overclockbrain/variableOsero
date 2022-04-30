@@ -9,12 +9,11 @@
 *******************************************************/
 
 class Board {
-    constructor(width, height) {
+    constructor(width, height, color = 1) {
         this.width = width;
         this.height = height;
-        this.putKoma = 4;
-        this.putBl = 2;
-        this.putWh = 2;
+        this.toggleTurn = color;
+
         this.boardElement = document.createElement('table');
         this.boardElement.id = 'mainTable';
 
@@ -32,7 +31,6 @@ class Board {
         for (let y = 0; y < height; y++) {
             const row = document.createElement('tr');
             this.state[y] = new Array(width);
-            
 
             for (let x = 0; x < width; x++) {
                 const cell = document.createElement('td');
@@ -40,47 +38,24 @@ class Board {
                 koma.imgElement.addEventListener('click', () => {
                     // 暫定処理
                     if (koma.state == 0) {
-                        //白と黒を交互に置くプログラム
-                        if(this.putKoma % 2 == 0){
-                            let reFlag = 0;
-                            reFlag += this.reverseKoma(y, x, 1, 0, -1);     // 右(探索する方向)
-                            reFlag += this.reverseKoma(y, x, 1, 0, 1);      // 左
-                            reFlag += this.reverseKoma(y, x, 1, -1, 0);     // 上
-                            reFlag += this.reverseKoma(y, x, 1, 1, 0);      // 下
-                            reFlag += this.reverseKoma(y, x, 1, -1, -1);    // 右上
-                            reFlag += this.reverseKoma(y, x, 1, 1, -1);     // 右下
-                            reFlag += this.reverseKoma(y, x, 1, -1, 1);     // 左上
-                            reFlag += this.reverseKoma(y, x, 1, 1, 1);      // 左下
-
-                            if (reFlag) {           // 裏返すコマの数が1以上なら
-                                koma.put(1);
-                                this.countKoma();
-                            } else {
-                                alert('そこには置けません!!');
-                            }
-                        }else{
-                            let reFlag = 0;
-                            reFlag += this.reverseKoma(y, x, 2, 0, -1);     // 右(探索する方向)
-                            reFlag += this.reverseKoma(y, x, 2, 0, 1);      // 左
-                            reFlag += this.reverseKoma(y, x, 2, -1, 0);     // 上
-                            reFlag += this.reverseKoma(y, x, 2, 1, 0);      // 下
-                            reFlag += this.reverseKoma(y, x, 2, -1, -1);    // 右上
-                            reFlag += this.reverseKoma(y, x, 2, 1, -1);     // 右下
-                            reFlag += this.reverseKoma(y, x, 2, -1, 1);     // 左上
-                            reFlag += this.reverseKoma(y, x, 2, 1, 1);      // 左下
-
-                            if (reFlag) {           // 裏返すコマの数が1以上なら
-                                koma.put(2);
-                                this.countKoma();
-                            } else {
-                                alert('そこには置けません!!');
-                            }
+                        let reFlag = 0;
+                        reFlag += this.reverseKoma(y, x, this.toggleTurn, 0, -1);     // 右(探索する方向)
+                        reFlag += this.reverseKoma(y, x, this.toggleTurn, 0, 1);      // 左
+                        reFlag += this.reverseKoma(y, x, this.toggleTurn, -1, 0);     // 上
+                        reFlag += this.reverseKoma(y, x, this.toggleTurn, 1, 0);      // 下
+                        reFlag += this.reverseKoma(y, x, this.toggleTurn, -1, -1);    // 右上
+                        reFlag += this.reverseKoma(y, x, this.toggleTurn, 1, -1);     // 右下
+                        reFlag += this.reverseKoma(y, x, this.toggleTurn, -1, 1);     // 左上
+                        reFlag += this.reverseKoma(y, x, this.toggleTurn, 1, 1);      // 左下
+                        
+                        if (reFlag) {           // 裏返すコマの数が1以上なら
+                            koma.put(this.toggleTurn);
+                            this.countKoma();
+                            this.turnEnd();
+                        } else {
+                            alert('そこには置けません!!');
                         }
-                        this.putKoma++;
-                    } else {
-                        koma.flip();
                     }
-                    this.countKoma();
                 });
 
                 this.state[y][x] = koma;
@@ -93,6 +68,7 @@ class Board {
 
         this.#putCenterKoma();
     }
+
     #putCenterKoma() {
         const basisX = this.width / 2 - 1;
         const basisY = this.height / 2 - 1;
@@ -102,6 +78,7 @@ class Board {
         this.state[basisY + 1][basisX].put(2);
         this.state[basisY + 1][basisX + 1].put(1);
     }
+
     countKoma() {
         let putWhite = document.getElementById("putWhite"),
             putBlack = document.getElementById("putBlack");
@@ -178,6 +155,11 @@ class Board {
         return reverseCount;
     }
 
+    turnEnd() {
+        let turnElement = document.getElementById('turn');
+        this.toggleTurn = this.toggleTurn % 2 + 1;
+        turnElement.innerHTML = KOMACOLOR[this.toggleTurn];
+    }
 }
 
 //
@@ -186,8 +168,10 @@ class Board {
 // 1 : 黒
 // 2 : 白
 // 
-
-let KOMAIMG = {
+const KOMACOLOR = {
+    0: 'no', 1: '黒', 2: '白'
+}
+const KOMAIMG = {
     0: '../img/none.jpg',
     1: '../img/black.jpg',
     2: '../img/white.jpg'
@@ -221,51 +205,22 @@ class Koma {
         this.imgElement.src = KOMAIMG[this.state];
     }
 }
-//ひっくり返す処理のテスト
-function returnKoma(){
-    //現在置かれたコマの色が必要->putKomaの数を割って偶数なら黒、奇数なら白とする。
-    //端っこにあるのかを判定
-    if(x == 0 || y == 0 || x + 1 == this.width || y + 1 == this.height){
-        //角にあるのかを判定
-        //左上、右下、左下、右上
-        if(x == 0 && y == 0){
-            //どの座標へ移動してみるのかと、コマの状態を比較する
-            for(i = x; i < this.width;i++){
-                nextKoma = this.board.state[x + 1][y]["state"];
-                if(nextKoma == "持ち駒ではないやつ"){
-                    
-                }else if(nextKoma == 0){
-
-                }
-            }
-        }else if(x + 1 == this.width && y + 1 == this.height){
-
-        }else if (x == 0 && y + 1 == this.height){
-
-        }else if(x + 1 == this.width && y == 0){
-
-        }
-    //それ以外の場所の処理
-    }else{
-        
-    }
-}
-
 
 window.onload = () => {
-    let height = 4;  // boardの横のマス数
-    let width = 4;  // boardの縦のマス数
+    let height = 6;  // boardの横のマス数
+    let width = 6;  // boardの縦のマス数
 
     const playground = document.getElementById("playground");
     const board = new Board(height, width);
     playground.appendChild(board.boardElement);
 
     // rangeでマス数を設定
-    let selecty = document.getElementById("selecty"),
-        viewy = document.getElementById("viewy"),
-        selectx = document.getElementById("selectx"),
-        viewx = document.getElementById("viewx"),
-        selectBtn = document.getElementById("selectBtn");
+    let selecty = document.getElementById('selecty'),
+        viewy = document.getElementById('viewy'),
+        selectx = document.getElementById('selectx'),
+        viewx = document.getElementById('viewx'),
+        selectBtn = document.getElementById('selectBtn'),
+        passElement = document.getElementById('pass');
 
     // range「y」の値が変更されたら
     selecty.addEventListener("input", (e) => {
@@ -281,5 +236,9 @@ window.onload = () => {
     selectBtn.addEventListener("click", () => {
         board.setStateAndElement(width, height);
         console.log(board.state);
+    });
+    // ターンを交代させる
+    passElement.addEventListener('click', () => {
+        board.turnEnd();
     });
 }
