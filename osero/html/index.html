@@ -13,18 +13,21 @@
             <h1>可変マスオセロ</h1>
         </article>
         <main>
-            <div>
-                <h2>白: <span id="putWhite">2</span></h2>
-                <h2>黒: <span id="putBlack">2</span></h2>
-            </div>
             <div class="slctNum">
-                <input type="range" id="selectx" min="4" max="50" step="2" value="4">
-                <input type="number" id="viewx" value="4" readonly>
-                <input type="range" id="selecty" min="4" max="50" step="2" value="4">
-                <input type="number" id="viewy" value="4" readonly><br>
+                横 : <input type="range" id="selectx" min="4" max="20" step="2" value="6">
+                <input type="number" id="viewx" value="6" readonly>
+                縦 : <input type="range" id="selecty" min="4" max="20" step="2" value="6">
+                <input type="number" id="viewy" value="6" readonly><br>
                 <input type="button" id="selectBtn" value="確定">
             </div>
+            <div class="view">
+                <h2><span id="turn">黒</span> の番</h2>
+                <h2>白: <span id="putWhite">2</span> 黒: <span id="putBlack">2</span></h2>
+            </div>
             <div id="playground"></div>
+            <div class="action">
+                <input type="button" id="pass" value="パス">
+            </div>
         </main>
     </body>
 </html>
