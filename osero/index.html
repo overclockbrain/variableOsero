@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./js/anime.min.js"></script>
+    <script src="./js/othello.js"></script>
+    <script src="./js/main.js"></script>
+    <link rel="stylesheet" href="./css/style.css">
+    <title>可変マス オセロ</title>
+</head>
+<body>
+    <header>
+        <h1>可変マス オセロ</h1>
+    </header>
+    <main>
+        <section id="preparation-section">
+            <h2>盤面の設定</h2>
+            <div id="large_width">
+                横: <input type="range" id="selectx" min="4" max="20" step="2" value="6">
+                <input type="number" id="viewx" value="6" readonly>
+            </div>
+            <div id="large_height">
+                縦: <input type="range" id="selecty" min="4" max="20" step="2" value="6">
+                <input type="number" id="viewy" value="6" readonly>
+            </div>
+            <div id="confirm">
+                <input type="button" id="selectBtn" value="確定">
+            </div>
+        </section>
+        <section id="game_start-section">
+            <div class="view">
+                <h2><span id="turn">黒</span> の番</h2>
+                <h2>白: <span class="putWhite">2</span> 黒: <span class="putBlack">2</span></h2>
+            </div>
+            <div id="playground"></div>
+            <div class="action">
+                <input type="button" id="pass" value="パス">
+                <input type="button" id="hint" value="ヒント">
+            </div>
+        </section>
+        <section id="game_end-section">
+            <h2>ゲーム終了</h2>
+            <h2>白: <span class="putWhite">2</span> 黒: <span class="putBlack">2</span></h2>
+            <h1 id="winner"></h1>
+            <input type="button" id="toStart" value="スタート画面に戻る">
+        </section>
+    </main>
+</body>
+</html>
