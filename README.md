@@ -1,4 +1,4 @@
-# my_sample
+# variableOthello
 
 ## Project setup
 ```
