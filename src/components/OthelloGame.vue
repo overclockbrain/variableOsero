@@ -1,20 +1,24 @@
 <template>
-  <div>
-    <p>{{ (currentColer == 1) ? '黒' : '白' }} の番</p>
-    <p>白: {{white}} 黒: {{black}}</p>
-  </div>
-  <table>
-    <tr v-for="y in height" :key="y">
-      <td v-for="x in width" :key="x">
-        <img :src="getImgSrc(y, x)" @click="change(y, x)" />
-      </td>
-    </tr>
-  </table>
-  <div id="message"><h2 v-show="message != ''"> {{message}} </h2></div>
-  <div>
-    <button @click="pass">パス</button>
-    <button @click="hint">ヒント</button>
-  </div>
+  <section>
+    <div>
+      <p>{{ currentColer == 1 ? "黒" : "白" }} の番</p>
+      <p>白: {{ white }} 黒: {{ black }}</p>
+    </div>
+    <table>
+      <tr v-for="y in height" :key="y">
+        <td v-for="x in width" :key="x">
+          <img :src="getImgSrc(y, x)" @click="change(y, x)" />
+        </td>
+      </tr>
+    </table>
+    <div id="message">
+      <h2 v-show="message != ''">{{ message }}</h2>
+    </div>
+    <div>
+      <button @click="pass">パス</button>
+      <button @click="hint">ヒント</button>
+    </div>
+  </section>
 </template>
 
 <script>
@@ -22,21 +26,23 @@
 // import anime from 'animejs';
 
 // AIプログラム
-const MYAI = require('../js/myai.js');  
+const MYAI = require("../assets/js/myai");
 
 export default {
-  name: 'OthelloGame',
+  name: "OthelloGame",
+  props: {
+    width: Number,
+    height: Number,
+  },
   data() {
     return {
-      width: this.$parent.width,
-      height: this.$parent.height,
       state: Array,
-      currentColer: 1,  // 現在の色
+      currentColer: 1, // 現在の色
       white: 2,
       black: 2,
-      history: Array,   // 盤面変化の履歴
-      message: '',
-    }
+      history: Array, // 盤面変化の履歴
+      message: "",
+    };
   },
   methods: {
     /** 盤面の状態を取得
@@ -77,7 +83,7 @@ export default {
     initState() {
       this.state = new Array(this.height);
 
-      for (let y = 0; y < this.height; y ++) {
+      for (let y = 0; y < this.height; y++) {
         this.state[y] = new Array(this.width).fill(0);
       }
       const basisY = this.height / 2;
@@ -93,36 +99,48 @@ export default {
     initHistory() {
       this.history = new Array();
     },
-    
+
     change(y, x) {
       const state = this.getState(y, x);
 
-      if (state == 0) { // koma is not placed
+      if (state == 0) {
+        // koma is not placed
         let reverseArray = this.search(y, x);
         let reverseCount = reverseArray.length;
 
         if (reverseCount) {
           this.setState(this.currentColer, y, x);
           this.reverse(reverseArray);
-          this.history.push({color: this.currentColer, flag: 'put', state: [y, x]});
+          this.history.push({
+            color: this.currentColer,
+            flag: "put",
+            state: [y, x],
+          });
           this.turnEnd();
         } else {
-          this.setMessage('そこには置けないよ〜');
+          this.setMessage("そこには置けないよ〜");
         }
       } else {
-        this.setMessage('そこには置けないよ〜');
+        this.setMessage("そこには置けないよ〜");
       }
     },
     /**
      * 裏返すことができるコマの数と、それぞれのコマの座標を返す
      * @param {Number} y 盤面のy座標
      * @param {Number} x 盤面のx座標
-     * 
+     *
      * @return {Array} {裏返すコマの座標}
      */
     search(y, x) {
       const SEARCH_ARGS = [
-        [0, -1], [0, 1], [1, -1], [1, 0], [1, 1], [-1, -1], [-1, 0], [-1, 1]
+        [0, -1],
+        [0, 1],
+        [1, -1],
+        [1, 0],
+        [1, 1],
+        [-1, -1],
+        [-1, 0],
+        [-1, 1],
       ];
       const REVERSE_COLOR = (this.currentColer % 2) + 1;
       let reverseArray = new Array();
@@ -142,26 +160,27 @@ export default {
           setY += YY;
           setX += XX;
           if (setY < 1 || setY > this.height || setX < 1 || setX > this.width) {
-            searchArray.push({flag: -1});
+            searchArray.push({ flag: -1 });
             break;
           }
           const state = this.getState(setY, setX);
-          if (state == REVERSE_COLOR) {   // 裏返すコマが置かれた場所
-            searchArray.push({flag: 1, y: setY, x: setX});
-          } else if (state == this.currentColer) {    // 自分と同じ色のコマが置かれた場所
-            searchArray.push({flag: 0});
+          if (state == REVERSE_COLOR) {
+            // 裏返すコマが置かれた場所
+            searchArray.push({ flag: 1, y: setY, x: setX });
+          } else if (state == this.currentColer) {
+            // 自分と同じ色のコマが置かれた場所
+            searchArray.push({ flag: 0 });
             break;
-          } else {    // コマが置かれていない場所
-            searchArray.push({flag: -1});
+          } else {
+            // コマが置かれていない場所
+            searchArray.push({ flag: -1 });
             break;
           }
         }
         let lastIndex = searchArray.length - 1;
-        if (searchArray[lastIndex]['flag'] == 0) {
-          for (let j = 0; j < lastIndex; j ++) {
-            reverseArray.push(
-              [searchArray[j]['y'], searchArray[j]['x']]
-            );
+        if (searchArray[lastIndex]["flag"] == 0) {
+          for (let j = 0; j < lastIndex; j++) {
+            reverseArray.push([searchArray[j]["y"], searchArray[j]["x"]]);
           }
         }
       }
@@ -189,18 +208,17 @@ export default {
           easing: "easeInOutQuad",
           duration: 500,
         }); */
-        
       }
     },
     /**
      * change または pass 後実行
      */
     turnEnd() {
-      this.currentColer = (this.currentColer % 2) + 1;  // 白黒の入れ替え
+      this.currentColer = (this.currentColer % 2) + 1; // 白黒の入れ替え
 
       // 終了条件
       let gameEndFlag = false;
-      
+
       this.count();
 
       // 盤面全てにコマが置かれていたらゲーム終了
@@ -212,20 +230,21 @@ export default {
 
       // pass が2回連続ならゲーム終了
       let lastIndex = Object.keys(this.history).length - 1;
-      if (this.history[lastIndex].flag == 'pass') {
-        lastIndex --;
-        if (this.history[lastIndex].flag == 'pass') {
+      if (this.history[lastIndex].flag == "pass") {
+        lastIndex--;
+        if (this.history[lastIndex].flag == "pass") {
           gameEndFlag = true;
         }
       }
       if (gameEndFlag) {
-        this.setMessage('ゲーム終了!!');
-        this.history[-1] = {black: this.black, white: this.white};
+        this.setMessage("ゲーム終了!!");
+        this.history[-1] = { black: this.black, white: this.white };
         setTimeout(() => {
-          this.$emit('othelloGame', this.history);
-        }, 2500);   // 表示を遅延させる
+          this.$emit("othelloGame", this.history);
+        }, 2500); // 表示を遅延させる
       } else {
-        if (this.currentColer == 2) { // 次の番が白 (proglam) の場合
+        if (this.currentColer == 2) {
+          // 次の番が白 (proglam) の場合
           const ai = new MYAI(2, this.state);
           let ans = ai.GetAnswer();
           setTimeout(() => {
@@ -235,7 +254,7 @@ export default {
             } else {
               this.pass();
             }
-          }, 500);  // 表示を遅延させる
+          }, 500); // 表示を遅延させる
         }
       }
     },
@@ -245,32 +264,32 @@ export default {
     count() {
       this.black = 0;
       this.white = 0;
-      for (let y = 0; y < this.height; y ++) {
-        for (let x = 0; x < this.width; x ++) {
+      for (let y = 0; y < this.height; y++) {
+        for (let x = 0; x < this.width; x++) {
           let color = this.state[y][x];
           if (color == 1) {
-            this.black ++;
+            this.black++;
           } else if (color == 2) {
-            this.white ++;
+            this.white++;
           }
         }
       }
     },
     /**
      * 盤面に置けるコマがあるかどうかを確認
-     * 
+     *
      * @return {Number} 置けるコマの数を返す
      */
     putCheck() {
       let putCount = 0;
-      for (let y = 1; y <= this.height; y ++) {
-        for (let x = 1; x <= this.width; x ++) {
+      for (let y = 1; y <= this.height; y++) {
+        for (let x = 1; x <= this.width; x++) {
           const state = this.getState(y, x);
           if (state == 0) {
             let reverseArray = this.search(y, x);
             let reverseCount = reverseArray.length;
             if (reverseCount) {
-              putCount ++;
+              putCount++;
             }
           }
         }
@@ -279,13 +298,13 @@ export default {
     },
     /**
      * コメントの表示
-     * @param {String} contents 出力するコメント内容 
+     * @param {String} contents 出力するコメント内容
      */
     setMessage(contents) {
       this.message = contents;
       setTimeout(() => {
-        this.message = '';
-      }, 1000);   // 1.0s 後に非表示
+        this.message = "";
+      }, 1000); // 1.0s 後に非表示
     },
 
     /** パス（置ける場所がある場合はパスできない）
@@ -294,13 +313,13 @@ export default {
       // パスできるかのチェック
       let canNotPass = this.putCheck();
       if (canNotPass) {
-        this.setMessage('置ける場所があるので、パスできません!!');
+        this.setMessage("置ける場所があるので、パスできません!!");
       } else {
         // コメント出力
         this.setMessage(
-          ((this.currentColer == 1) ? '黒' : '白') + 
-          'がパスしました！');
-        this.history.push({color: this.currentColer, flag: 'pass'});
+          (this.currentColer == 1 ? "黒" : "白") + "がパスしました！"
+        );
+        this.history.push({ color: this.currentColer, flag: "pass" });
         this.turnEnd();
       }
     },
@@ -309,8 +328,7 @@ export default {
     hint() {
       this.putCheck();
     },
-
-  },    
+  },
   created() {
     this.initState();
     this.initHistory();
@@ -323,7 +341,7 @@ export default {
       this.initState();
     },
   },
-}
+};
 </script>
 
 <style scoped>
